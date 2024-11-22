@@ -5,6 +5,8 @@ import UserRoutes from './Kanbas/Users/routes.js'
 import cors from "cors";
 import session from "express-session";
 import "dotenv/config";
+import CourseRoutes from './Kanbas/Courses/routes.js';
+import ModuleRoutes from "./Kanbas/Modules/routes.js";
 
 const app = express();
 app.use(
@@ -29,10 +31,12 @@ if (process.env.NODE_ENV !== "development") {
     };
 }
 app.use(session(sessionOptions));
-
+app.use(express.json());
   
-Hello(app)
-Lab5(app)
-UserRoutes(app)
+Hello(app);
+Lab5(app);
+UserRoutes(app);
+CourseRoutes(app);
+ModuleRoutes(app);
 
 app.listen(process.env.PORT || 4000, () => console.log("hello, server started"));
