@@ -1,8 +1,27 @@
 import * as dao from "./dao.js";
 import * as modulesDao from "../Modules/dao.js";
+import * as assignmentDao from "../Assignments/dao.js";
 
 export default function CourseRoutes(app) {
   
+  app.get("/api/courses/:courseId/assignments", (req, res) => {
+    const { courseId } = req.params;
+    const assignments = assignmentDao.findAssignmentsForCourse(courseId);
+    console.log("assignments:"+assignments);
+    
+    res.json(assignments);
+  });
+ 
+  app.post("/api/courses/:courseId/assignments", (req, res) => {
+    const { courseId } = req.params;
+    const assignment = {
+      ...req.body,
+      course: courseId,
+    };
+    const newAssignment = assignmentDao.createAssignment(assignment);
+    res.send(newAssignment);
+  });
+
   app.post("/api/courses/:courseId/modules", (req, res) => {
     const { courseId } = req.params;
     const module = {
@@ -18,11 +37,6 @@ export default function CourseRoutes(app) {
     const modules = modulesDao.findModulesForCourse(courseId);
     res.json(modules);
   });
-
-  app.get("/api/courses", (req, res) => {
-    const courses = dao.findAllCourses();
-    res.send(courses);
-  });
   
   app.delete("/api/courses/:courseId", (req, res) => {
     const { courseId } = req.params;
@@ -37,4 +51,8 @@ export default function CourseRoutes(app) {
     res.send(status);
   });
 
+  app.get("/api/courses", (req, res) => {
+    const courses = dao.findAllCourses();
+    res.send(courses);
+  });
 }
